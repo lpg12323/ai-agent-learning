@@ -5,7 +5,9 @@ class Student:
         try:
             self.age = int(age)
         except (ValueError, TypeError):
-             raise ValueError(f"年龄必须是数字，收到：{age!r}")
+            raise ValueError(f"年龄必须是数字，收到：{age!r}")
+        if not 0 <= self.age <= 150:
+            raise ValueError(f"年龄必须在 0-150 之间，收到：{self.age}")
         self.gender = gender
         try:
             self.score = float(score)
