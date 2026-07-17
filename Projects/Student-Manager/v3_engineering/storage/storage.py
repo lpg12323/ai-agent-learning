@@ -6,7 +6,8 @@ class JsonStorage:
     @staticmethod
     def save(filepath, students):
         """将学生列表序列化为 JSON 并保存到文件"""
-        data = {"students": [{"student_id": s.student_id, "name": s.name, "age": s.age}
+        data = {"students": [{"student_id": s.student_id, "name": s.name, "age": s.age,
+                              "gender": s.gender, "score": s.score}
                              for s in students]}
         with open(filepath, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
@@ -17,7 +18,8 @@ class JsonStorage:
         try:
             with open(filepath, "r", encoding="utf-8") as f:
                 data = json.load(f)
-            return [Student(s["student_id"], s["name"], s["age"])
+            return [Student(s["student_id"], s["name"], s["age"],
+                            s.get("gender", ""), s.get("score", 0.0))
                     for s in data["students"]]
         except (FileNotFoundError, json.JSONDecodeError):
             return []
