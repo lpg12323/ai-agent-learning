@@ -1,6 +1,7 @@
 from models.student import Student
 from services.manager import StudentManager
 from services.statistics import StudentStatistics
+import json
 
 def main():
     manager = StudentManager()
@@ -29,9 +30,11 @@ def main():
                 student_id = input("请输入学号：")
             name = input("请输入学生姓名：")
             age = input("请输入学生年龄：")
-            
+            score_input = input("请输入学生成绩（0-100，回车默认0）：")
+
             try:
-                student = Student(student_id, name, age)
+                score = float(score_input) if score_input.strip() else 0.0
+                student = Student(student_id, name, age, score=score)
                 manager.add_student(student)
                 print("添加成功！")
             except ValueError as e:
@@ -172,15 +175,33 @@ def main():
                 break
 
         elif choice == "8":
-            # 统计信息
+            # 统计信息子菜单
             students = manager.get_all_students()
             stats = StudentStatistics(students)
-            total = stats.total_count()
-            avg_age = stats.average_age()
-            ratio = stats.gender_ratio()
-            print(f"总人数：{total}")
-            print(f"平均年龄：{avg_age:.1f}")
-            print(f"性别比例：男={ratio['男']}, 女={ratio['女']}, 未知={ratio['未知']}")
+            while True:
+                print("="*30)
+                print("统计信息")
+                print("1.打印统计报告")
+                print("2.导出统计JSON")
+                print("3.返回上级菜单")
+                print("="*30)
+                sub_choice = input("请选择操作：")
+                if sub_choice == "1":
+                    # 打印统计报告
+                    print(stats.print_report())
+                elif sub_choice == "2":
+                    # 导出统计JSON到文件
+                    data = stats.export_json()
+                    try:
+                        with open("data/statistics_export.json", "w", encoding="utf-8") as f:
+                            json.dump(data, f, ensure_ascii=False, indent=2)
+                        print("导出成功：data/statistics_export.json")
+                    except IOError as e:
+                        print(f"导出失败：{e}")
+                elif sub_choice == "3":
+                    break
+                else:
+                    print("输入错误")
 
         else:
             print("输入错误，请重新选择")
