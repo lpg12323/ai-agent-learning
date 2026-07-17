@@ -30,11 +30,12 @@ def main():
                 student_id = input("请输入学号：")
             name = input("请输入学生姓名：")
             age = input("请输入学生年龄：")
+            gender = input("请输入学生性别（男/女，回车跳过）：")
             score_input = input("请输入学生成绩（0-100，回车默认0）：")
 
             try:
                 score = float(score_input) if score_input.strip() else 0.0
-                student = Student(student_id, name, age, score=score)
+                student = Student(student_id, name, age, gender=gender, score=score)
                 manager.add_student(student)
                 print("添加成功！")
             except ValueError as e:
@@ -136,8 +137,8 @@ def main():
                 continue
 
             # 修改学生信息
-            print(f"当前信息：学号={target.student_id}, 姓名={target.name}, 年龄={target.age}")
-            field_choice = input("修改姓名(1)还是年龄(2)？")
+            print(f"当前信息：学号={target.student_id}, 姓名={target.name}, 年龄={target.age}, 性别={target.gender}, 成绩={target.score}")
+            field_choice = input("修改姓名(1)/年龄(2)/性别(3)/成绩(4)？")
             try:
                 if field_choice == "1":
                     new_name = input("请输入新姓名：")
@@ -146,6 +147,14 @@ def main():
                 elif field_choice == "2":
                     new_age = input("请输入新年龄：")
                     manager.update_student(target, "age", new_age)
+                    print("修改成功")
+                elif field_choice == "3":
+                    new_gender = input("请输入新性别（男/女，回车跳过）：")
+                    manager.update_student(target, "gender", new_gender)
+                    print("修改成功")
+                elif field_choice == "4":
+                    new_score = input("请输入新成绩（0-100）：")
+                    manager.update_student(target, "score", new_score)
                     print("修改成功")
                 else:
                     print("输入错误")
