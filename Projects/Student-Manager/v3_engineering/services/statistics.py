@@ -1,6 +1,6 @@
 class StudentStatistics:
     def __init__(self, students):
-        self.students = students
+        self.students = list(students)
 
     def total_count(self):
         """返回学生总人数"""
